@@ -1,4 +1,4 @@
-## Intalación
+## Instalación
 ```
 npm i 
 ```
