@@ -4,29 +4,32 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Bed, Bath, Square, MapPin, Euro } from 'lucide-react'
+import { ArrowLeft, Bed, Bath, Square, MapPin, Hash, User, Mail, CalendarIcon, CreditCard } from 'lucide-react'
+
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+
+// private Propietario propietario;
+//   private Integer id;
+//   private String ubicacion;
+//   private String tipo;
+//   private String destino;
+//   private Integer ambientes;
+//   private Integer banios;
+//   private Integer mts_cuadrados;
+//   private String Propietario_PERSONA_CUIL;
+
 
 // Datos de ejemplo para una propiedad
 const propiedad = {
   id: 1,
-  titulo: "Villa de lujo con vistas al mar",
-  tipo: "Villa",
-  precio: 1250000,
-  ubicacion: "Costa del Sol, Málaga",
-  habitaciones: 5,
-  banos: 4,
-  superficie: 350,
-  descripcion: "Espectacular villa de lujo con impresionantes vistas al mar Mediterráneo. Esta propiedad de ensueño cuenta con amplios espacios, acabados de alta calidad y una piscina infinita. Perfecta para aquellos que buscan privacidad y confort en una de las zonas más exclusivas de la Costa del Sol.",
-  caracteristicas: [
-    "Piscina infinita",
-    "Jardín paisajístico",
-    "Garaje para 3 coches",
-    "Cocina de diseño",
-    "Domótica",
-    "Gimnasio",
-    "Sauna",
-    "Terraza con vistas panorámicas"
-  ],
+  titulo: "Complejo Estudiantil",
+  tipo: "Alquiler",
+  ubicacion: "Calle 23 entre 2 y 102",
+  ambientes: 5,
+  banios: 4,
+  mtsCuadrados: 350,
+  // propietario: {
+  // },
   imagenPrincipal: "/placeholder.svg?height=400&width=600"
 }
 
@@ -68,30 +71,23 @@ export default function DetallesPropiedad(id : number) {
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center mb-6">
-              <p className="text-3xl font-bold flex items-center">
-                <Euro className="mr-1 h-6 w-6" />
-                {propiedad.precio.toLocaleString()}
-              </p>
               <div className="flex space-x-4">
                 <span className="flex items-center">
                   <Bed className="mr-1 h-5 w-5" />
-                  {propiedad.habitaciones}
+                  {propiedad.ambientes}
                 </span>
                 <span className="flex items-center">
                   <Bath className="mr-1 h-5 w-5" />
-                  {propiedad.banos}
+                  {propiedad.banios}
                 </span>
                 <span className="flex items-center">
                   <Square className="mr-1 h-5 w-5" />
-                  {propiedad.superficie} m²
+                  {propiedad.mtsCuadrados} m²
                 </span>
               </div>
             </div>
 
-            {/* <h3 className="text-xl font-semibold mb-2">Descripción</h3> */}
-            {/* <p className="mb-4">{propiedad.descripcion}</p> */}
-
-            <h3 className="text-xl font-semibold mb-2">Características</h3>
+            {/* <h3 className="text-xl font-semibold mb-2">Características</h3>
             <ul className="grid grid-cols-2 gap-2">
               {propiedad.caracteristicas.map((caracteristica, index) => (
                 <li key={index} className="flex items-center">
@@ -99,7 +95,51 @@ export default function DetallesPropiedad(id : number) {
                   {caracteristica}
                 </li>
               ))}
-            </ul>
+            </ul> */}
+
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Información del Propietario</h3>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-4 mb-4">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Foto del propietario" />
+                    <AvatarFallback>JP</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-lg font-semibold">Juan Pérez</p>
+                    <p className="text-sm text-muted-foreground">Propietario</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <Hash className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="text-sm">CUIL: 20-12345678-9</span>
+                    </div>
+                    <div className="flex items-center">
+                      <User className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="text-sm">DNI: 12345678</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="text-sm">Email: juan.perez@email.com</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="text-sm">Fecha de Nacimiento: 15/05/1980</span>
+                    </div>
+                    <div className="flex items-center">
+                      <CreditCard className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="text-sm">CBU: 0123456789012345678901</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
           </CardContent>
           <div className="flex justify-center space-x-4 mt-8 mb-8">
             <Button size="lg" variant="destructive">Eliminar propiedad</Button>

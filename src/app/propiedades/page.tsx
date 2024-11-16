@@ -10,6 +10,18 @@ import { Label } from "@/components/ui/label"
 import { Search, Plus, Home, Filter } from 'lucide-react'
 
 import { NavbarContent } from '@/components/ui/NavbarContent'
+import CrearPropiedad from './CrearPropiedad'
+
+// private Propietario propietario;
+// private Integer id;
+// private String ubicacion;
+// private String tipo;
+// private String destino;
+// private Integer ambientes;
+// private Integer banios;
+// private Integer mts_cuadrados;
+// private String Propietario_PERSONA_CUIL;
+
 
 // Datos de ejemplo
 const propiedades = [
@@ -25,6 +37,7 @@ export default function Component() {
   const [tipoFiltro, setTipoFiltro] = useState('Todos')
   const [ordenar, setOrdenar] = useState('precio-asc')
   const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const propiedadesFiltradas = propiedades
     .filter(propiedad => 
@@ -40,9 +53,6 @@ export default function Component() {
   const aplicarFiltros = () => {
     setIsOpen(false)
   }
-
-
-  
 
   return (
     <div className="flex h-screen">
@@ -134,12 +144,18 @@ export default function Component() {
             ))}
           </div>
 
-          <Button 
-            className="fixed bottom-4 right-4 rounded-full w-14 h-14 p-0 shadow-lg"
-            aria-label="Agregar Propiedad"
-          >
-            <Plus className="h-6 w-6" />
-          </Button>
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                className="fixed bottom-4 right-4 rounded-full w-14 h-14 p-0 shadow-lg"
+                aria-label="Agregar Propiedad"
+              >
+                <Plus className="h-6 w-6" />
+              </Button>
+            </DialogTrigger>
+          
+            <CrearPropiedad setIsModalOpen={setIsModalOpen}></CrearPropiedad>
+          </Dialog>
           </div>
         </div>
       </div>  
