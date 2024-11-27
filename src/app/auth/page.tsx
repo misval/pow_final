@@ -6,14 +6,48 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import app from '../../../firebase-config';
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const auth = getAuth(app);
+
+  const handleLogin = (event: React.FormEvent) => {
     event.preventDefault()
     setIsLoading(true)
-    // Aquí iría la lógica de autenticación
+    
+    const email = (event.target as any).email.value
+    const password = (event.target as any).password.value
+
+    try {
+      signInWithEmailAndPassword(auth, email, password)
+    } catch (err: any) {
+      console.log("error al registrarse", err)
+    } finally {
+      setIsLoading(false)
+    }
+
+    setTimeout(() => setIsLoading(false), 2000) // Simulación de carga
+  }
+
+  const handleRegister = (event: React.FormEvent) => {
+    event.preventDefault()
+    setIsLoading(true)
+    
+    const email = (event.target as any).email.value
+    const password = (event.target as any).password.value
+
+    try {
+      createUserWithEmailAndPassword(auth, email, password)
+    } catch (err: any) {
+      console.log("error al registrarse", err)
+    } finally {
+      setIsLoading(false)
+    }
+
     setTimeout(() => setIsLoading(false), 2000) // Simulación de carga
   }
 
@@ -33,7 +67,7 @@ export default function AuthPage() {
             </TabsList>
            
            <TabsContent value="login">
-              <form onSubmit={handleSubmit} className="mt-4">
+              <form onSubmit={handleLogin} className="mt-4">
                 <div className="grid gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
@@ -51,12 +85,12 @@ export default function AuthPage() {
             </TabsContent>
 
             <TabsContent value="register">
-              <form onSubmit={handleSubmit} className="mt-4">
+              <form onSubmit={handleRegister} className="mt-4">
                 <div className="grid gap-4">
-                  <div className="grid gap-2">
+                  {/* <div className="grid gap-2">
                     <Label htmlFor="name">Nombre</Label>
                     <Input id="name" type="text" required />
-                  </div>
+                  </div> */}
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
                     <Input id="email" type="email" placeholder="m@example.com" required />
