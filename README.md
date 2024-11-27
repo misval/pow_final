@@ -28,7 +28,7 @@ http://localhost:3000/contratos/
 http://localhost:3000/contratos/1 
 ```
 
-Auth (Implementacion opcional)
+Auth
 ```
 http://localhost:3000/auth 
 ```
