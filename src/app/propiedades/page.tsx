@@ -1,68 +1,47 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Search, Plus, Home, Filter } from 'lucide-react'
 
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from '@/components/ui/table'
+
 import { NavbarContent } from '@/components/ui/NavbarContent'
 import CrearPropiedad from './CrearPropiedad'
 
-// private Propietario propietario;
-// private Integer id;
-// private String ubicacion;
-// private String tipo;
-// private String destino;
-// private Integer ambientes;
-// private Integer banios;
-// private Integer mts_cuadrados;
-// private String Propietario_PERSONA_CUIL;
+import { Propiedad } from '@/types/propiedad'
 
-
-// Datos de ejemplo
-const propiedades = [
-  { id: 1, titulo: "Casa en la playa", tipo: "Casa", precio: 250000, ubicacion: "Costa del Sol" },
-  { id: 2, titulo: "Apartamento céntrico", tipo: "Apartamento", precio: 150000, ubicacion: "Madrid" },
-  { id: 3, titulo: "Chalet con jardín", tipo: "Chalet", precio: 350000, ubicacion: "Barcelona" },
-  { id: 4, titulo: "Estudio moderno", tipo: "Estudio", precio: 100000, ubicacion: "Valencia" },
-  { id: 5, titulo: "Ático de lujo", tipo: "Ático", precio: 500000, ubicacion: "Marbella" },
-]
+import { IPV4 } from '../../../global'
+import Link from 'next/link'
 
 export default function Component() {
   const [busqueda, setBusqueda] = useState('')
-  const [tipoFiltro, setTipoFiltro] = useState('Todos')
-  const [ordenar, setOrdenar] = useState('precio-asc')
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [propiedades, setPropiedades] = useState<Propiedad[]>([]);
 
-  const propiedadesFiltradas = propiedades
-    .filter(propiedad => 
-      propiedad.titulo.toLowerCase().includes(busqueda.toLowerCase()) &&
-      (tipoFiltro === 'Todos' || propiedad.tipo === tipoFiltro)
-    )
-    .sort((a, b) => {
-      if (ordenar === 'precio-asc') return a.precio - b.precio
-      if (ordenar === 'precio-desc') return b.precio - a.precio
-      return 0
-    })
-
-  const aplicarFiltros = () => {
-    setIsOpen(false)
-  }
+  useEffect(() => {
+    const fetchPropiedades = async () => {
+      const res = await fetch(`http://${IPV4}:4567/propiedades`);
+      const data: Propiedad[] = await res.json();
+      setPropiedades(data);
+    } 
+    fetchPropiedades();
+  }, [])
 
   return (
     <div className="flex h-screen">
       <aside className="hidden md:flex flex-col w-64 p-4 border-r">
         <NavbarContent />
-      </aside>
+      </aside>  
 
       <div className="flex-1 overflow-auto">
         <div className='container mx-auto p-4 pb-20'>
-        <h1 className="text-2xl font-bold mb-4">Listado de Propiedades</h1>
+        <h1 className="text-2xl font-bold mb-4 mt-12">Listado de Propiedades</h1>
         
         <div className="flex flex-col gap-4 mb-4">
           <div className="relative w-full">
@@ -92,57 +71,43 @@ export default function Component() {
                     <Label htmlFor="tipo" className="text-right">
                       Tipo
                     </Label>
-                    {/* <Select
-                      id="tipo"
-                      value={tipoFiltro}
-                      onValueChange={setTipoFiltro}
-                      className="col-span-3"
-                    >
-                      <option value="Todos">Todos los tipos</option>
-                      <option value="Casa">Casa</option>
-                      <option value="Apartamento">Apartamento</option>
-                      <option value="Chalet">Chalet</option>
-                      <option value="Estudio">Estudio</option>
-                      <option value="Ático">Ático</option>
-                    </Select> */}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="ordenar" className="text-right">
                       Ordenar
                     </Label>
-                    {/* <Select
-                      id="ordenar"
-                      value={ordenar}
-                      onValueChange={setOrdenar}
-                      className="col-span-3"
-                    >
-                      <option value="precio-asc">Precio: Menor a Mayor</option>
-                      <option value="precio-desc">Precio: Mayor a Menor</option>
-                    </Select> */}
                   </div>
                 </div>
-                <Button onClick={aplicarFiltros}>Aplicar Filtros</Button>
+                <Button>Aplicar Filtros</Button>
               </DialogContent>
             </Dialog>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {propiedadesFiltradas.map(propiedad => (
-              <Card key={propiedad.id}>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Home className="mr-2 h-5 w-5" />
-                    {propiedad.titulo}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p><strong>Tipo:</strong> {propiedad.tipo}</p>
-                  <p><strong>Precio:</strong> €{propiedad.precio.toLocaleString()}</p>
-                  <p><strong>Ubicación:</strong> {propiedad.ubicacion}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Ubicacion</TableHead>
+                <TableHead>Tipo</TableHead>
+                <TableHead>Destino</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {
+                propiedades.map(propiedad => (
+                    <TableRow key={propiedad.id}>
+                        <TableCell>{propiedad.ubicacion}</TableCell>
+                        <TableCell>{propiedad.tipo}</TableCell>
+                        <TableCell>{propiedad.destino}</TableCell>
+                        <TableCell>
+                          <Link href={`/propiedades/${propiedad.id}`} className='bg-slate-200 p-2 rounded-md'>
+                            Ver detalles
+                          </Link>
+                        </TableCell>
+                    </TableRow>
+                ))
+              }
+            </TableBody>
+          </Table>
 
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>

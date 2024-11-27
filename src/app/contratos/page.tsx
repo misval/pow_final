@@ -1,27 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Search, Plus, FileText, Filter, Menu, Home, Building, LogOut } from 'lucide-react'
 
+import Link from 'next/link';
+
+import { Table, TableCell, TableBody, TableRow, TableHead, TableHeader } from '@/components/ui/table'
+
 import { NavbarContent } from '@/components/ui/NavbarContent'
 
 import CrearContrato from './CrearContrato'
+import { IPV4 } from '../../../global'
+import { Contrato } from '@/types/contrato'
 
 // Datos de ejemplo para contratos
-const contratos = [
-  { id: 1, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-  { id: 2, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-  { id: 3, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-  { id: 4, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-  { id: 5, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-]
+// const contratos = [
+//   { id: 1, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
+//   { id: 2, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
+//   { id: 3, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
+//   { id: 4, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
+//   { id: 5, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
+// ]
 
 
 export default function Component() {
@@ -30,19 +34,30 @@ export default function Component() {
   const [ordenar, setOrdenar] = useState('valor-asc')
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [contratos, setContratos] = useState<Contrato[]>();
+
+  useEffect(() => {
+    const fetchContratos = async () => {
+      const res = await fetch(`http://${IPV4}:4567/contratos`);
+      const data = await res.json();
+      setContratos(data);
+    }
+    fetchContratos();
+  }, [])
   
-  const contratosFiltrados = contratos
-    .filter(contrato => 
-      contrato.titulo.toLowerCase().includes(busqueda.toLowerCase()) &&
-      (tipoFiltro === 'Todos' || contrato.tipo === tipoFiltro)
-    )
-    .sort((a, b) => {
-      if (ordenar === 'valor-asc') return a.valor - b.valor
-      if (ordenar === 'valor-desc') return b.valor - a.valor
-      if (ordenar === 'fecha-asc') return new Date(a.fechaInicio).getTime() - new Date(b.fechaInicio).getTime()
-      if (ordenar === 'fecha-desc') return new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
-      return 0
-    })
+
+  // const contratosFiltrados = contratos
+  //   .filter(contrato => 
+  //     contrato.titulo.toLowerCase().includes(busqueda.toLowerCase()) &&
+  //     (tipoFiltro === 'Todos' || contrato.tipo === tipoFiltro)
+  //   )
+  //   .sort((a, b) => {
+  //     if (ordenar === 'valor-asc') return a.valor - b.valor
+  //     if (ordenar === 'valor-desc') return b.valor - a.valor
+  //     if (ordenar === 'fecha-asc') return new Date(a.fechaInicio).getTime() - new Date(b.fechaInicio).getTime()
+  //     if (ordenar === 'fecha-desc') return new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
+  //     return 0
+  //   })
 
   const aplicarFiltros = () => {
     setIsOpen(false)
@@ -73,7 +88,7 @@ export default function Component() {
             </Sheet>
           </div>
 
-          <h1 className="text-2xl font-bold mb-4">Listado de Contratos</h1>
+          <h1 className="text-2xl font-bold mb-4 mt-12">Listado de Contratos</h1>
           
           <div className="flex flex-col gap-4 mb-4">
             <div className="relative w-full">
@@ -103,35 +118,11 @@ export default function Component() {
                       <Label htmlFor="tipo" className="text-right">
                         Tipo
                       </Label>
-                        {/* <Select
-                          id="tipo"
-                          value={tipoFiltro}
-                          onValueChange={setTipoFiltro}
-                          className="col-span-3"
-                        >
-                          <option value="Todos">Todos los tipos</option>
-                          <option value="Servicios">Servicios</option>
-                          <option value="Licencia">Licencia</option>
-                          <option value="Consultoría">Consultoría</option>
-                          <option value="SLA">SLA</option>
-                          <option value="Mantenimiento">Mantenimiento</option>
-                        </Select> */}
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="ordenar" className="text-right">
                         Ordenar
                       </Label>
-                      {/* <Select
-                        id="ordenar"
-                        value={ordenar}
-                        onValueChange={setOrdenar}
-                        className="col-span-3"
-                      >
-                        <option value="valor-asc">Valor: Menor a Mayor</option>
-                        <option value="valor-desc">Valor: Mayor a Menor</option>
-                        <option value="fecha-asc">Fecha: Más antiguo primero</option>
-                        <option value="fecha-desc">Fecha: Más reciente primero</option>
-                      </Select> */}
                     </div>
                   </div>
                   <Button onClick={aplicarFiltros}>Aplicar Filtros</Button>
@@ -140,7 +131,7 @@ export default function Component() {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {contratosFiltrados.map(contrato => (
               <Card key={contrato.id}>
                 <CardHeader>
@@ -157,7 +148,33 @@ export default function Component() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+          </div> */}
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Propiedad</TableHead>
+                <TableHead>Fecha Inicio</TableHead>
+                <TableHead>Fecha Fin</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {
+                contratos?.map(contrato => (
+                    <TableRow key={contrato.idContrato}>
+                        <TableCell>{contrato.propiedad.ubicacion}</TableCell>
+                        <TableCell>{contrato.fechaInicio}</TableCell>
+                        <TableCell>{contrato.fechaFin}</TableCell>
+                        <TableCell>
+                          <Link href={`/contratos/${contrato.idContrato}`} className='bg-slate-200 p-2 rounded-md'>
+                            Ver detalles
+                          </Link>
+                        </TableCell>
+                    </TableRow>
+                ))
+              }
+            </TableBody>
+          </Table>
 
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
