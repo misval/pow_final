@@ -274,7 +274,7 @@ const CrearContrato: React.FC<CrearContratoProps> = ({ setIsModalOpen }) => {
               </Button>
             )}  
 
-            <Input type="hidden" name="idPropiedad" value={propiedadSeleccionada?.id} />
+            <Input type="hidden" name="idPropiedad" value={propiedadSeleccionada?.id}/>
           </div>
           <Button type="submit" className="w-full">Crear Contrato</Button>
         </form>

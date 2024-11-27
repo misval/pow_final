@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { Search, Plus, Home, Filter } from 'lucide-react'
+import { Search, Plus, Home, Filter, Menu } from 'lucide-react'
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet'
 
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from '@/components/ui/table'
 
@@ -41,6 +41,21 @@ export default function Component() {
 
       <div className="flex-1 overflow-auto">
         <div className='container mx-auto p-4 pb-20'>
+        {/* Menú hamburguesa para móviles */}
+        <div className="md:hidden mb-4">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="h-4 w-4" />
+                  <span className="sr-only">Abrir menú</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <NavbarContent />
+              </SheetContent>
+            </Sheet>
+          </div>
+
         <h1 className="text-2xl font-bold mb-4 mt-12">Listado de Propiedades</h1>
         
         <div className="flex flex-col gap-4 mb-4">

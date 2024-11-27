@@ -56,7 +56,6 @@ export default function DetallesContrato({ params }: { params: Promise<{ id: num
       const id = ((await params).id);
       const res = await fetch(`http://${IPV4}:4567/contratoId/${id}`);
       const data = await res.json();
-      console.log(data);
       setContrato(data);
     }
     fetchContrato();

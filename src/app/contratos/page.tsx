@@ -18,16 +18,6 @@ import CrearContrato from './CrearContrato'
 import { IPV4 } from '../../../global'
 import { Contrato } from '@/types/contrato'
 
-// Datos de ejemplo para contratos
-// const contratos = [
-//   { id: 1, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-//   { id: 2, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-//   { id: 3, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-//   { id: 4, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-//   { id: 5, titulo: "Calle 23 entre 2 y 102", tipo: "alquiler", valor: 50000, fechaInicio: "2023-01-15", estado: "Activo" },
-// ]
-
-
 export default function Component() {
   const [busqueda, setBusqueda] = useState('')
   const [tipoFiltro, setTipoFiltro] = useState('Todos')
@@ -46,31 +36,16 @@ export default function Component() {
   }, [])
   
 
-  // const contratosFiltrados = contratos
-  //   .filter(contrato => 
-  //     contrato.titulo.toLowerCase().includes(busqueda.toLowerCase()) &&
-  //     (tipoFiltro === 'Todos' || contrato.tipo === tipoFiltro)
-  //   )
-  //   .sort((a, b) => {
-  //     if (ordenar === 'valor-asc') return a.valor - b.valor
-  //     if (ordenar === 'valor-desc') return b.valor - a.valor
-  //     if (ordenar === 'fecha-asc') return new Date(a.fechaInicio).getTime() - new Date(b.fechaInicio).getTime()
-  //     if (ordenar === 'fecha-desc') return new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
-  //     return 0
-  //   })
-
   const aplicarFiltros = () => {
     setIsOpen(false)
   }
 
   return (
     <div className="flex h-screen">
-      {/* Navbar para desktop */}
       <aside className="hidden md:flex flex-col w-64 p-4 border-r">
         <NavbarContent />
       </aside>
 
-      {/* Contenido principal */}
       <div className="flex-1 overflow-auto">
         <div className="container mx-auto p-4 pb-20">
           {/* Menú hamburguesa para móviles */}

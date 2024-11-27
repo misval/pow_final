@@ -78,9 +78,8 @@ const CrearPropiedad: React.FC<CrearPropiedadProps> = ({ setIsModalOpen }) => {
         method: "POST",
         body: bodyData
       });
-  
-      console.log(response.status);
-      
+
+      console.log(response.json());
 
       if (!response.ok) {
         throw new Error("Error en la solicitud");
@@ -90,8 +89,8 @@ const CrearPropiedad: React.FC<CrearPropiedadProps> = ({ setIsModalOpen }) => {
       alert("Propiedad creada exitosamente");
       console.log(result);
     } catch (error) {
-      console.error(error);
-      alert("Error al crear la propiedad");
+      // console.error(error);
+      // alert("Error al crear la propiedad");
     }
 
     setIsModalOpen(false)
@@ -128,7 +127,7 @@ const CrearPropiedad: React.FC<CrearPropiedadProps> = ({ setIsModalOpen }) => {
     <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
       <div className="px-4 py-6">
         <DialogHeader>
-          <DialogTitle>Crear Nuevo Contrato</DialogTitle>
+          <DialogTitle>Crear Nuevo Propiedad</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 py-6">
@@ -232,9 +231,9 @@ const CrearPropiedad: React.FC<CrearPropiedadProps> = ({ setIsModalOpen }) => {
           </div>
 
           {/* seleccionar propietario */}
-          {/* <div className="space-y-2">
+          <div className="space-y-2">
             <Label>Propietario</Label>
-            <div className="relative">
+          {/*  <div className="relative">
               <Input
                 type="text"
                 placeholder="Buscar propietario..."
@@ -271,7 +270,7 @@ const CrearPropiedad: React.FC<CrearPropiedadProps> = ({ setIsModalOpen }) => {
             )} */}
 
             <Input type="string" name="cuilPropietario" id='cuilPropietario'/>
-          {/* </div> */}
+          </div>
 
 
           <Button type="submit" className="w-full">Crear Propiedad</Button>
